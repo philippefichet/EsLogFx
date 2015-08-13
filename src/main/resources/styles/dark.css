@@ -1,0 +1,39 @@
+.root {
+    -fx-base: #222;
+    -fx-accent: #003482;
+    -fx-focus-color: #297af4;
+    -fx-control-inner-background: derive(-fx-base,30%);
+    -fx-control-inner-background: #111;
+    -fx-control-inner-background-alt: derive(-fx-control-inner-background,-30%);
+}
+
+.axis-tick-mark, .axis-minor-tick-mark {
+    -fx-stroke: #999;
+}
+
+.scroll-bar > .decrement-button > .decrement-arrow,
+.scroll-bar > .increment-button > .increment-arrow {
+    -fx-border-color:#888;
+    -fx-border-width: 1px;
+}
+
+.scroll-bar > .increment-button,
+.scroll-bar > .decrement-button {
+    -fx-background-color: #222, #111, #000;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #000;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: -fx-accent, #000;
+}
+.scroll-bar .thumb:pressed {
+    -fx-background-color: -fx-accent, -fx-accent, #000;
+}
+.scroll-bar > .increment-button:hover > .increment-arrow, .scroll-bar > .decrement-button:hover > .decrement-arrow {
+    -fx-border-color: -fx-accent;
+}
+.scroll-bar > .decrement-button:pressed, .scroll-bar > .increment-button:pressed {
+    -fx-background-color: -fx-accent, -fx-accent, #000;
+}

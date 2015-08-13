@@ -1,0 +1,93 @@
+.root {
+     -fx-font-size: 1.35em;
+        
+    -fx-background-log-debug: #004;
+    -fx-background-log-debug-alt: #002;
+    -fx-color-log-debug: #fff;
+
+    -fx-background-log-info: #040;
+    -fx-background-log-info-alt: #020;
+    -fx-color-log-info: #fff;
+
+    -fx-background-log-warn: #a55900;
+    -fx-background-log-warn-alt: #804500;
+    -fx-color-log-warn: #fff;
+
+    -fx-background-log-error: #400;
+    -fx-background-log-error-alt: #200;
+    -fx-color-log-error: #fff;
+
+    -fx-background-log-fatal: #aaa;
+    -fx-background-log-fatal-alt: #888;
+    -fx-color-log-fatal: #000;
+
+/*    -fx-inner-border: #777;
+    -fx-text-box-border: #777;*/
+    /*-fx-body-color: #f00;*/
+}
+
+.scroll-bar {
+    -fx-padding: 0em;
+}
+.scroll-bar:horizontal > .decrement-button > .decrement-arrow,
+.scroll-bar:horizontal > .increment-button > .increment-arrow {
+    /*-fx-padding: 0.4em 0.20em;*/
+}
+.scroll-bar > .increment-button,
+.scroll-bar > .decrement-button {
+    -fx-padding: 0.5em;
+}
+
+/* Debug */
+.table-cell.debug {
+    -fx-background-color: -fx-background-log-debug;
+}
+.table-cell.debug .text{
+    -fx-fill: -fx-color-log-debug;
+}
+.table-cell.debug:odd {
+    -fx-background-color: -fx-background-log-debug-alt;
+}
+/* Info */
+.table-cell.info {
+    -fx-background-color: -fx-background-log-info;
+}
+.table-cell.info .text{
+    -fx-fill: -fx-color-log-info;
+}
+.table-cell.info:odd {
+    -fx-background-color: -fx-background-log-info-alt;
+}
+/* Warning */
+.table-cell.warn {
+    -fx-background-color: -fx-background-log-warn;
+}
+.table-cell.warn .text{
+    -fx-fill: -fx-color-log-warn;
+}
+.table-cell.warn:odd {
+    -fx-background-color: -fx-background-log-warn-alt;
+}
+/* Erreur */
+.table-cell.error {
+    -fx-background-color: -fx-background-log-error;
+}
+.table-cell.error .text{
+    -fx-fill: -fx-color-log-error;
+}
+.table-cell.error:odd {
+    -fx-background-color: -fx-background-log-error-alt;
+}
+/* Fatal */
+.table-cell.fatal {
+    -fx-background-color: -fx-background-log-fatal;
+}
+.table-cell.fatal .text{
+    -fx-fill: -fx-color-log-fatal;
+}
+.table-cell.fatal:odd {
+    -fx-background-color: -fx-background-log-fatal-alt;
+}
+.table-row-cell:selected .table-cell {
+    -fx-background-color: -fx-selection-bar;
+}
