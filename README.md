@@ -1,4 +1,5 @@
 # ESLogFX
+[![Stories in Ready](https://badge.waffle.io/philippefichet/EsLogFx.svg?label=ready&title=Ready)](http://waffle.io/philippefichet/EsLogFx)
 
 ## Lancement
 
