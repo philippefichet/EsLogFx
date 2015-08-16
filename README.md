@@ -1,6 +1,10 @@
 # ESLogFX
 [![Stories in Ready](https://badge.waffle.io/philippefichet/EsLogFx.svg?label=ready&title=Ready)](http://waffle.io/philippefichet/EsLogFx)
 
+Interface de visualisation des logs dans ElasticSearch
+
+Java 8+ requis et JavaFX 8
+
 ## Lancement
 
 java -Deslogfx.configfile=/chemin/de/la/configuration -jar EsLogFx-1.0-SNAPSHOT.jar
