@@ -5,9 +5,17 @@ Interface de visualisation des logs dans ElasticSearch
 
 Java 8+ requis et JavaFX 8
 
+## Compilation
+
+```shell
+mvn package
+```
+
 ## Lancement
 
-java -Deslogfx.configfile=/chemin/de/la/configuration -jar EsLogFx-1.0-SNAPSHOT.jar
+```shell
+java -Deslogfx.configfile=/chemin/de/la/configuration -jar target/EsLogFx-1.0-SNAPSHOT.jar
+```
 
 ## Fichier de configuration : 
 ```javascript
