@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -52,6 +53,9 @@ public class MainApp extends Application {
         stage.setTitle("ElasticSearch Log FX");
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest((e) -> {
+            Platform.exit();
+        });
     }
 
     /**
