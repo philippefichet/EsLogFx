@@ -5,11 +5,14 @@ import fr.philippefichet.eslogfx.elasticsearch.Result;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,12 +21,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 public class ElasticSearchController implements Initializable {
 
@@ -33,6 +39,14 @@ public class ElasticSearchController implements Initializable {
     @FXML
     private Button getLogs;
 
+    @FXML
+    private Label schedulerLabel;
+    
+    @FXML
+    private Slider schedulerSlider;
+
+    SimpleObjectProperty<Duration> scheduleDuration = new SimpleObjectProperty<>(Duration.seconds(5));
+    
     private Map<String, TableColumn<Map<String, String>, String>> columns = new HashMap<>();
 
     private String fieldLevel = "";
@@ -93,6 +107,7 @@ public class ElasticSearchController implements Initializable {
         ElasticSearchLogService service;
         service = new ElasticSearchLogService(config);
         service.setOnSucceeded(value -> {
+            System.out.println("setOnSucceeded = " + new Date());
             Result result = ((Result)value.getSource().getValue());
             for (Hit hit : result.getHits().getHits()) {
                 // Initialisation des colonnes
@@ -170,15 +185,30 @@ public class ElasticSearchController implements Initializable {
                 FXCollections.sort(logs, comparatorRableLogs);
             }
             getLogs.setDisable(false);
+            scheduleDuration.set(Duration.seconds(schedulerSlider.valueProperty().intValue()));
         });
         service.setOnFailed(value -> {
             value.getSource().getException().printStackTrace();
             getLogs.setDisable(false);
         });
+        service.setOnRunning((e) -> {
+            getLogs.setDisable(true);
+        });
         getLogs.setOnAction((event) -> {
             getLogs.setDisable(true);
-            service.reset();
-            service.start();
+            service.cancel();
+            scheduleDuration.set(Duration.seconds(0));
+            service.restart();
         });
+        
+        schedulerLabel.textProperty().bind(schedulerSlider.valueProperty().asString("%.0f s."));
+        schedulerSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            service.cancel();
+            scheduleDuration.set(Duration.seconds(newValue.intValue()));
+            service.restart();
+        });
+
+        service.periodProperty().bind(scheduleDuration);
+        service.start();
     }
 }

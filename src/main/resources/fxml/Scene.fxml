@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.philippefichet.eslogfx.ElasticSearchController">
+<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.philippefichet.eslogfx.ElasticSearchController">
    <center>
       <TableView fx:id="tableLogs" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
@@ -12,6 +13,12 @@
       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="getLogs" mnemonicParsing="false" text="Logs" />
+            <Slider fx:id="schedulerSlider" blockIncrement="5.0" majorTickUnit="5.0" max="30.0" min="1.0" minorTickCount="0" showTickMarks="true" value="5.0">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Slider>
+            <Label fx:id="schedulerLabel" />
          </children>
       </HBox>
    </top>

@@ -7,9 +7,7 @@ package fr.philippefichet.eslogfx;
 
 import com.google.gson.Gson;
 import fr.philippefichet.eslogfx.elasticsearch.Result;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -19,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.concurrent.Service;
+import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -42,7 +40,7 @@ import org.apache.http.ssl.SSLContexts;
  *
  * @author philippefichet
  */
-public class ElasticSearchLogService extends Service<Result>  {
+public class ElasticSearchLogService extends ScheduledService<Result> {
     private CloseableHttpClient httpclient = null;
     private HttpClientContext context = HttpClientContext.create();
     private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
