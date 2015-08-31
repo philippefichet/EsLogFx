@@ -22,11 +22,13 @@ public class TableCellLog extends TableCell<Map<String, String>, String>{
         levels.put("debug", "debug");
         levels.put("info", "info");
         levels.put("warn", "warn");
+        levels.put("warning", "warn");
         levels.put("notice", "warn");
         levels.put("error", "error");
         levels.put("err", "error");
         levels.put("fatal", "fatal");
         levels.put("severe", "fatal");
+        levels.put("alert", "fatal");
     }
 
     private String fieldLevel = null;
