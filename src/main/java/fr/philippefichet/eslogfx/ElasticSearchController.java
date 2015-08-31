@@ -26,6 +26,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -41,12 +43,15 @@ public class ElasticSearchController implements Initializable {
 
     @FXML
     private Label schedulerLabel;
-    
+
     @FXML
     private Slider schedulerSlider;
 
+    @FXML
+    private TextField filter;
+
     SimpleObjectProperty<Duration> scheduleDuration = new SimpleObjectProperty<>(Duration.seconds(5));
-    
+
     private Map<String, TableColumn<Map<String, String>, String>> columns = new HashMap<>();
 
     private String fieldLevel = "";
@@ -68,7 +73,7 @@ public class ElasticSearchController implements Initializable {
     private final Map<String, List<String>> enumField = new HashMap<>();
     private final List<String> enumFieldExcluded = new ArrayList<>();
     private final Short enumFieldLimit = 50;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         levelAvailable.add("trace");
@@ -88,6 +93,13 @@ public class ElasticSearchController implements Initializable {
                 stage.setTitle("My New Stage Title");
                 stage.setScene(scene);
                 stage.show();
+            }
+        });
+        filter.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                tableLogs.setItems(logs.filtered((Map<String, String> t) -> {
+                    return t.get(fieldMessage).contains(filter.getText());
+                }));
             }
         });
         FilteredList<Map<String, String>> filtered = logs.filtered((Map<String, String> t) -> {
@@ -200,7 +212,7 @@ public class ElasticSearchController implements Initializable {
             scheduleDuration.set(Duration.seconds(0));
             service.restart();
         });
-        
+
         schedulerLabel.textProperty().bind(schedulerSlider.valueProperty().asString("%.0f s."));
         schedulerSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             service.cancel();

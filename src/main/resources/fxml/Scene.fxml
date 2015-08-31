@@ -12,6 +12,11 @@
    <top>
       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
+            <TextField fx:id="filter" promptText="Filtres">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </TextField>
             <Button fx:id="getLogs" mnemonicParsing="false" text="Logs" />
             <Slider fx:id="schedulerSlider" blockIncrement="5.0" majorTickUnit="5.0" max="30.0" min="1.0" minorTickCount="0" showTickMarks="true" value="5.0">
                <HBox.margin>
