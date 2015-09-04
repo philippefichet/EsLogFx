@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.animation.Timeline;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +38,9 @@ public class ElasticSearchController implements Initializable {
 
     @FXML
     private Button getLogs;
+
+    @FXML
+    private Button getLogsInES;
 
     @FXML
     private Label schedulerLabel;
@@ -111,6 +112,8 @@ public class ElasticSearchController implements Initializable {
         Config config = Config.getInstance();
         if (config.getFieldMessage() != null) {
             fieldMessage = config.getFieldMessage();
+        } else {
+            config.setFieldMessage(fieldMessage);
         }
         if(config.getFieldMessageNumberLine() != null) {
             fieldMessageNumberLine = config.getFieldMessageNumberLine();
@@ -119,7 +122,6 @@ public class ElasticSearchController implements Initializable {
         ElasticSearchLogService service;
         service = new ElasticSearchLogService(config);
         service.setOnSucceeded(value -> {
-            System.out.println("setOnSucceeded = " + new Date());
             Result result = ((Result)value.getSource().getValue());
             for (Hit hit : result.getHits().getHits()) {
                 // Initialisation des colonnes
@@ -197,11 +199,13 @@ public class ElasticSearchController implements Initializable {
                 FXCollections.sort(logs, comparatorRableLogs);
             }
             getLogs.setDisable(false);
+            getLogsInES.setDisable(false);
             scheduleDuration.set(Duration.seconds(schedulerSlider.valueProperty().intValue()));
         });
         service.setOnFailed(value -> {
             value.getSource().getException().printStackTrace();
             getLogs.setDisable(false);
+            getLogsInES.setDisable(false);
         });
         service.setOnRunning((e) -> {
             getLogs.setDisable(true);
@@ -210,6 +214,14 @@ public class ElasticSearchController implements Initializable {
             getLogs.setDisable(true);
             service.cancel();
             scheduleDuration.set(Duration.seconds(0));
+            service.restart();
+        });
+        getLogsInES.setOnAction((event) -> {
+            getLogsInES.setDisable(true);
+            getLogs.setDisable(true);
+            service.cancel();
+            scheduleDuration.set(Duration.seconds(0));
+            service.nextQueryWithFilter(filter.getText());
             service.restart();
         });
 

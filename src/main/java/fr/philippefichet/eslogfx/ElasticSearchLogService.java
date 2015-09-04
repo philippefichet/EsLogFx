@@ -56,6 +56,8 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
     private Long timestamp = 0L;
     private int size = 1;
     private Config config;
+    private String elasticSearchFilter = null;
+    private boolean nextQueryWithElasticSearchFilter = false;
 
     public ElasticSearchLogService(Config config) {
         this.config = config;
@@ -149,6 +151,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                         }
                     }
                 });
+                nextQueryWithElasticSearchFilter = false;
                 return result;
             }
         };
@@ -169,7 +172,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                 sb.append("\"filtered\":{");
                     // Filter
                     sb.append("\"filter\":{");
-                    if (fieldDate != null && startAt != null) {
+                    if (fieldDate != null && startAt != null && nextQueryWithElasticSearchFilter == false) {
                         sb.append("\"range\":{\"").append(fieldDate).append("\":{\"gt\":\"");
                         if (sdf == null) {
                             if (Config.DATE_FORMAT_TIMESTAMP.equals(config.getDateFormat())) {
@@ -186,7 +189,12 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
 
                     // Query
                     sb.append(",\"query\":{");
-                    sb.append("\"match_all\":{}");
+                    
+                    if (nextQueryWithElasticSearchFilter) {
+                        sb.append("match:{\"").append(config.getFieldMessage()).append("\":\"").append(elasticSearchFilter).append("\"}");
+                    } else {
+                        sb.append("\"match_all\":{}");
+                    }
                     sb.append("}");
                 sb.append("}");
             sb.append("}");
@@ -212,6 +220,10 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
         } else {
             throw new Exception(response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
         }
+    }
 
+    public void nextQueryWithFilter(String filter) {
+        nextQueryWithElasticSearchFilter = true;
+        elasticSearchFilter = filter;
     }
 }
