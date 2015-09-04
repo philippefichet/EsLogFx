@@ -1,5 +1,5 @@
 # ESLogFX
-[![Stories in Ready](https://badge.waffle.io/philippefichet/EsLogFx.svg?label=ready&title=Ready)](http://waffle.io/philippefichet/EsLogFx)
+[![Stories in Ready](https://badge.waffle.io/philippefichet/EsLogFx.svg?label=ready&title=Ready)](http://waffle.io/philippefichet/EsLogFx) [![Build Status](https://travis-ci.org/philippefichet/EsLogFx.svg?branch=master)](https://travis-ci.org/philippefichet/EsLogFx)
 
 Interface de visualisation des logs dans ElasticSearch
 
