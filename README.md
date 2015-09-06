@@ -28,6 +28,9 @@ java -Deslogfx.configfile=/chemin/de/la/configuration -jar target/EsLogFx-1.0-SN
     "fieldMessage": "msg", // optionnel
     "fieldMessageNumberLine" : 2, // optionnel
     "dateFormat": "timestamp"  // optionnel
+    "fieldExclude": [  // optionnel
+        "date"
+    ]
 }
 
 ```
@@ -40,3 +43,4 @@ java -Deslogfx.configfile=/chemin/de/la/configuration -jar target/EsLogFx-1.0-SN
 - fieldMessage nom du champs contenant le message du log, "message" par défaut
 - fieldMessageNumberLine nombre de ligne afficher dans la liste des logs du message, 1 par défaut
 - dateFormat format de la date, "yyyy-MM-dd'T'HH:mm:ss.SSSZZ" par défaut (voir http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html)
+- fieldExclude Liste des colonnes qui ne seront pas afficher

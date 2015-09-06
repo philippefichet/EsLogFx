@@ -11,6 +11,8 @@ import com.google.gson.JsonSyntaxException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -29,6 +31,7 @@ public class Config {
     private Integer fieldMessageNumberLine = 1;
     private Long rewindSecond = 7200L;
     private String authScope;
+    private List<String> fieldExclude = new ArrayList<>();
 
     public static Config getInstance() {
         if (instance == null) {
@@ -132,6 +135,14 @@ public class Config {
         this.fieldMessageNumberLine = fieldMessageNumberLine;
     }
 
+    public List<String> getFieldExclude() {
+        return fieldExclude;
+    }
+
+    public void setFieldExclude(List<String>fieldExlude) {
+        this.fieldExclude = fieldExlude;
+    }
+    
     @Override
     public String toString() {
         return "Config{" + "url=" + url + ", login=" + login + ", password=" + password + ", dateFormat=" + dateFormat + ", fieldDate=" + fieldDate + ", fieldLevel=" + fieldLevel + ", rewindSecond=" + rewindSecond + ", authScope=" + authScope + '}';

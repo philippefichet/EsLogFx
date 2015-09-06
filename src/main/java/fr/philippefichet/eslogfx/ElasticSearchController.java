@@ -138,7 +138,7 @@ public class ElasticSearchController implements Initializable {
                 if (columns.isEmpty()) {
                     ObservableList<TableColumn<Map<String, String>, ?>> tableColumns = tableLogs.getColumns();
                     hit.getSource().forEach((String k, String v) -> {
-                        if (k.startsWith("_") == false) {
+                        if (k.startsWith("_") == false && config.getFieldExclude().contains(k) == false) {
                             // Traitement des colonnes
                             TableColumn<Map<String, String>, String> c = new TableColumn<>(k);
                             columns.put(k, c);
@@ -172,7 +172,7 @@ public class ElasticSearchController implements Initializable {
                     continue;
                 }
                 hit.getSource().forEach((String k, String v) -> {
-                    if (k.startsWith("_") == false) {
+                    if (k.startsWith("_") == false && config.getFieldExclude().contains(k) == false) {
                         // Si le champs n'est pas exclus des enums
                         if (!enumFieldExcluded.contains(v)) {
                             List<String> enumValues = enumField.get(k);
