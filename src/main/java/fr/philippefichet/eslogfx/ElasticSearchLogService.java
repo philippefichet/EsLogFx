@@ -7,6 +7,7 @@ package fr.philippefichet.eslogfx;
 
 import com.google.gson.Gson;
 import fr.philippefichet.eslogfx.elasticsearch.Result;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -15,6 +16,7 @@ import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.concurrent.ScheduledService;
@@ -105,10 +107,12 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
         return new Task<Result>() {
             @Override
             protected Result call() throws Exception {
+                updateProgress(-1, -1);
                 if (fieldDate == null || startAt == null) {
                     size = 1;
                     if (fieldDate == null) {
-                        Result result = callElasticSearch();
+                        updateMessage("Recherche d'information sur le mapping");
+                        Result result = callElasticSearch(this::updateProgress);
                         result.getHits().getHits().stream().forEach((hit) -> {
                             hit.getSource().forEach((String k, String v) -> {
                                 if (k.startsWith("_") == false) {
@@ -129,7 +133,9 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                 } else {
                     size = 100;
                 }
-                Result result = callElasticSearch();
+                updateMessage("Demande de logs");
+                Result result = callElasticSearch(this::updateProgress);
+                updateMessage("Analyse des logs");
                 result.getHits().getHits().stream().forEach((hit) -> {
                     if (sdf == null) {
                         if(Config.DATE_FORMAT_TIMESTAMP.equals(config.getDateFormat())) {
@@ -152,6 +158,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                     }
                 });
                 nextQueryWithElasticSearchFilter = false;
+                updateMessage("Ajout des logs dans l'interface");
                 return result;
             }
         };
@@ -204,16 +211,29 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
 
     /**
      * Execute un appel au serveur elasticsearch
+     * @param update Mise à jour avec la taille télécharget et la taille total
      * @return Résultat de l'appel
      * @throws Exception Si une erreur est intervenue
      */
-    protected Result callElasticSearch() throws Exception {
+    protected Result callElasticSearch(BiConsumer<Long, Long> update) throws Exception {
         HttpPost elasticSearchPost = new HttpPost(url + "/_search?");
         elasticSearchPost.setEntity(new StringEntity(createBody()));
         CloseableHttpResponse response = httpclient.execute(elasticSearchPost, context);
         if(response.getStatusLine().getStatusCode() == 200) {
+            long maxSize = response.getEntity().getContentLength();
+            long sizeProgess = 0;
+            update.accept(sizeProgess, maxSize);
+            BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            StringBuilder sb = new StringBuilder();
+            char[] buffer = new char[2048];
+            int bufferSize = 0;
+            while((bufferSize = br.read(buffer)) > 0) {
+                sb.append(buffer, 0, bufferSize);
+                sizeProgess += bufferSize;
+                update.accept(sizeProgess, maxSize);
+            }
             Gson gson = new Gson();
-            Result result = gson.fromJson(new InputStreamReader(response.getEntity().getContent()), Result.class);
+            Result result = gson.fromJson(sb.toString(), Result.class);
             elasticSearchPost.completed();
             response.close();
             return result;

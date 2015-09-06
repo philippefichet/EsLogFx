@@ -6,7 +6,6 @@ import fr.philippefichet.eslogfx.elasticsearch.UniqHashMap;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -51,6 +51,15 @@ public class ElasticSearchController implements Initializable {
 
     @FXML
     private TextField filter;
+
+    @FXML
+    private ProgressBar downloadProgress;
+
+    @FXML
+    private Label downloadProgressText;
+
+    @FXML
+    private Label currentTask;
 
     SimpleObjectProperty<Duration> scheduleDuration = new SimpleObjectProperty<>(Duration.seconds(5));
 
@@ -202,7 +211,12 @@ public class ElasticSearchController implements Initializable {
                 }
                 logs.add(row);
             }
+            currentTask.textProperty().unbind();
+            downloadProgress.progressProperty().unbind();
+            downloadProgressText.textProperty().unbind();
+            currentTask.setText("Tri des logs");
             FXCollections.sort(logs, comparatorRableLogs);
+            currentTask.setText("Terminer");
             getLogs.setDisable(false);
             getLogsInES.setDisable(false);
             scheduleDuration.set(Duration.seconds(schedulerSlider.valueProperty().intValue()));
@@ -211,8 +225,12 @@ public class ElasticSearchController implements Initializable {
             value.getSource().getException().printStackTrace();
             getLogs.setDisable(false);
             getLogsInES.setDisable(false);
+            currentTask.setText("Erreur : " + value.getSource().getException().getLocalizedMessage());
         });
         service.setOnRunning((e) -> {
+            downloadProgress.progressProperty().bind(service.progressProperty());
+            downloadProgressText.textProperty().bind(service.progressProperty().multiply(100).asString("%.2f").concat("%"));
+            currentTask.textProperty().bind(service.messageProperty());
             getLogs.setDisable(true);
         });
         getLogs.setOnAction((event) -> {
@@ -222,6 +240,7 @@ public class ElasticSearchController implements Initializable {
             service.restart();
         });
         getLogsInES.setOnAction((event) -> {
+            currentTask.textProperty().bind(service.messageProperty());
             getLogsInES.setDisable(true);
             getLogs.setDisable(true);
             service.cancel();

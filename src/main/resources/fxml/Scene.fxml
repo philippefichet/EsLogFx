@@ -12,6 +12,11 @@
    <top>
       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="getLogsInES" mnemonicParsing="false" text="ES">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
             <TextField fx:id="filter" promptText="Filtres">
                <HBox.margin>
                   <Insets right="5.0" />
@@ -27,4 +32,21 @@
          </children>
       </HBox>
    </top>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <StackPane maxWidth="200.0">
+               <children>
+                  <ProgressBar fx:id="downloadProgress" prefWidth="200.0" progress="0.0" />
+                  <Label fx:id="downloadProgressText" text="0.00 %" textAlignment="CENTER" />
+               </children>
+            </StackPane>
+            <Label fx:id="currentTask">
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
