@@ -2,6 +2,7 @@ package fr.philippefichet.eslogfx;
 
 import fr.philippefichet.eslogfx.elasticsearch.Hit;
 import fr.philippefichet.eslogfx.elasticsearch.Result;
+import fr.philippefichet.eslogfx.elasticsearch.UniqHashMap;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -156,7 +157,11 @@ public class ElasticSearchController implements Initializable {
                     });
                 }
 
-                Map<String, String> row = new HashMap<>();
+                Map<String, String> row = new UniqHashMap();
+                row.put("_id", hit.getId());
+                if (logs.contains(row)) {
+                    continue;
+                }
                 hit.getSource().forEach((String k, String v) -> {
                     if (k.startsWith("_") == false) {
                         // Si le champs n'est pas exclus des enums
@@ -196,8 +201,8 @@ public class ElasticSearchController implements Initializable {
                     }
                 }
                 logs.add(row);
-                FXCollections.sort(logs, comparatorRableLogs);
             }
+            FXCollections.sort(logs, comparatorRableLogs);
             getLogs.setDisable(false);
             getLogsInES.setDisable(false);
             scheduleDuration.set(Duration.seconds(schedulerSlider.valueProperty().intValue()));
