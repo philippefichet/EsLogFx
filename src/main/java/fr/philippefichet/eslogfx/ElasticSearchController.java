@@ -93,6 +93,7 @@ public class ElasticSearchController implements Initializable {
         levelAvailable.add("warn");
         levelAvailable.add("error");
         levelAvailable.add("severe");
+        downloadProgressText.textProperty().bind(downloadProgress.progressProperty().multiply(100).asString("%.2f").concat("%"));
         tableLogs.setOnMouseClicked((event) -> {
             if(event.getClickCount() > 1) {
                 Map<String, String> row = tableLogs.getSelectionModel().getSelectedItem();
@@ -213,7 +214,7 @@ public class ElasticSearchController implements Initializable {
             }
             currentTask.textProperty().unbind();
             downloadProgress.progressProperty().unbind();
-            downloadProgressText.textProperty().unbind();
+            downloadProgress.setProgress(1.0d);
             currentTask.setText("Tri des logs");
             FXCollections.sort(logs, comparatorRableLogs);
             currentTask.setText("Terminer");
@@ -229,7 +230,6 @@ public class ElasticSearchController implements Initializable {
         });
         service.setOnRunning((e) -> {
             downloadProgress.progressProperty().bind(service.progressProperty());
-            downloadProgressText.textProperty().bind(service.progressProperty().multiply(100).asString("%.2f").concat("%"));
             currentTask.textProperty().bind(service.messageProperty());
             getLogs.setDisable(true);
         });
