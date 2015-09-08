@@ -25,7 +25,7 @@ public class MainApp extends Application {
 //        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.impl.client", "DEBUG");
 //        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.client", "DEBUG");
 //        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");
-        
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
         fxmlLoader.load();
         Parent root = fxmlLoader.getRoot();
@@ -33,14 +33,18 @@ public class MainApp extends Application {
             @Override
             public Path convert(String uri) {
                 if (uri.startsWith("/styles")) {
-                    String source = new File(".").getAbsolutePath() + 
-                        File.separator + "src" + 
-                        File.separator + "main" + 
-                        File.separator + "resources" + 
+                    String source = new File(".").getAbsolutePath() +
+                        File.separator + "src" +
+                        File.separator + "main" +
+                        File.separator + "resources" +
                         uri.replace("/", File.separator);
                     return Paths.get(source);
                 } else {
-                    return Paths.get(uri);
+                    if (File.separator.equals("\\")) {
+                        return Paths.get(uri.replace("file:/", ""));
+                    } else {
+                        return Paths.get(uri.replace("file:", ""));
+                    }
                 }
             }
         };
@@ -50,6 +54,10 @@ public class MainApp extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/dark.css");
         scene.getStylesheets().add("/styles/Styles.css");
+        String cssFile = System.getProperty("eslogfx.cssfile");
+        if (cssFile != null) {
+            scene.getStylesheets().add(new File(cssFile).toURI().toString());
+        }
         stage.setTitle("ElasticSearch Log FX");
         stage.setScene(scene);
         stage.show();

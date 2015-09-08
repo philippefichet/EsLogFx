@@ -14,7 +14,7 @@ mvn package
 ## Lancement
 
 ```shell
-java -Deslogfx.configfile=/chemin/de/la/configuration -jar target/EsLogFx-1.0-SNAPSHOT.jar
+java -Deslogfx.configfile=/chemin/de/la/configuration -Deslogfx.cssfile=/chemin/de/la/feuille/de/style -jar target/EsLogFx-1.0-SNAPSHOT.jar
 ```
 
 ## Fichier de configuration : 
