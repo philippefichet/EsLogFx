@@ -29,6 +29,8 @@ public class TableCellLog extends TableCell<Map<String, String>, String>{
         levels.put("fatal", "fatal");
         levels.put("severe", "fatal");
         levels.put("alert", "fatal");
+        levels.put("crit", "fatal");
+        levels.put("emerg", "fatal");
     }
 
     private String fieldLevel = null;
