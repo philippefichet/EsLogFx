@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -165,8 +166,23 @@ public class ElasticSearchController implements Initializable {
                             }
                         });
                     });
-                }
 
+                    if (fieldMessage != null) {
+                        TableColumn<Map<String, String>, ?> messageColumn = null;
+                        Iterator<TableColumn<Map<String, String>, ?>> iterator = tableLogs.getColumns().iterator();
+                        while(iterator.hasNext()) {
+                            TableColumn<Map<String, String>, ?> next = iterator.next();
+                            if(next.textProperty().get().equals(fieldMessage)) {
+                                messageColumn = next;
+                                iterator.remove();
+                                break;
+                            }
+                        }
+                        if (messageColumn != null) {
+                            tableLogs.getColumns().add(messageColumn);
+                        }
+                    }
+                }
                 Map<String, String> row = new UniqHashMap();
                 row.put("_id", hit.getId());
                 if (logs.contains(row)) {
@@ -226,6 +242,8 @@ public class ElasticSearchController implements Initializable {
             value.getSource().getException().printStackTrace();
             getLogs.setDisable(false);
             getLogsInES.setDisable(false);
+            currentTask.textProperty().unbind();
+            service.restart();
             currentTask.setText("Erreur : " + value.getSource().getException().getLocalizedMessage());
         });
         service.setOnRunning((e) -> {
@@ -240,7 +258,6 @@ public class ElasticSearchController implements Initializable {
             service.restart();
         });
         getLogsInES.setOnAction((event) -> {
-            currentTask.textProperty().bind(service.messageProperty());
             getLogsInES.setDisable(true);
             getLogs.setDisable(true);
             service.cancel();
