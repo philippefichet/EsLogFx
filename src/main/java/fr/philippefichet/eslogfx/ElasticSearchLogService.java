@@ -53,6 +53,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
     };
     private String url;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    private SimpleDateFormat timestampToSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
     private String fieldDate = null;
     private Date startAt = null;
     private Long timestamp = 0L;
@@ -69,6 +70,10 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
             } else {
                 sdf = new SimpleDateFormat(config.getDateFormat());
             }
+        }
+        
+        if (config.getDateFormatShow() != null) {
+            timestampToSdf = new SimpleDateFormat(config.getDateFormatShow());
         }
         url = config.getUrl();
         fieldDate = config.getFieldDate();
@@ -140,6 +145,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                     if (sdf == null) {
                         if(Config.DATE_FORMAT_TIMESTAMP.equals(config.getDateFormat())) {
                             Long t = Long.parseLong(hit.getSource().get(fieldDate));
+                            hit.getSource().put(fieldDate, timestampToSdf.format(new Date(t*1000)));
                             if (timestamp < t) {
                                 t = timestamp;
                             }
@@ -196,7 +202,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
 
                     // Query
                     sb.append(",\"query\":{");
-                    
+
                     if (nextQueryWithElasticSearchFilter) {
                         sb.append("match:{\"").append(config.getFieldMessage()).append("\":\"").append(elasticSearchFilter).append("\"}");
                     } else {

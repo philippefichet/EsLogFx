@@ -25,6 +25,7 @@ public class Config {
     private String login;
     private String password;
     private String dateFormat;
+    private String dateFormatShow;
     private String fieldDate;
     private String fieldLevel;
     private String fieldMessage;
@@ -142,7 +143,15 @@ public class Config {
     public void setFieldExclude(List<String>fieldExlude) {
         this.fieldExclude = fieldExlude;
     }
-    
+
+    public String getDateFormatShow() {
+        return dateFormatShow;
+    }
+
+    public void setDateFormatShow(String dateFormatShow) {
+        this.dateFormatShow = dateFormatShow;
+    }
+
     @Override
     public String toString() {
         return "Config{" + "url=" + url + ", login=" + login + ", password=" + password + ", dateFormat=" + dateFormat + ", fieldDate=" + fieldDate + ", fieldLevel=" + fieldLevel + ", rewindSecond=" + rewindSecond + ", authScope=" + authScope + '}';
