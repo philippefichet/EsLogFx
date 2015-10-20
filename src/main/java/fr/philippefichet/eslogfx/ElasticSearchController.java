@@ -92,8 +92,16 @@ public class ElasticSearchController implements Initializable {
         levelAvailable.add("debug");
         levelAvailable.add("info");
         levelAvailable.add("warn");
+        levelAvailable.add("warning");
+        levelAvailable.add("notice");
         levelAvailable.add("error");
+        levelAvailable.add("err");
         levelAvailable.add("severe");
+        levelAvailable.add("fatal");
+        levelAvailable.add("alert");
+        levelAvailable.add("crit");
+        levelAvailable.add("emerg");
+        
         downloadProgressText.textProperty().bind(downloadProgress.progressProperty().multiply(100).asString("%.2f").concat("%"));
         tableLogs.setOnMouseClicked((event) -> {
             if(event.getClickCount() > 1) {
