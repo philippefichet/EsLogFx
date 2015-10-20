@@ -147,7 +147,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                             Long t = Long.parseLong(hit.getSource().get(fieldDate));
                             hit.getSource().put(fieldDate, timestampToSdf.format(new Date(t*1000)));
                             if (timestamp < t) {
-                                t = timestamp;
+                                timestamp = t;
                             }
                         } else {
                             throw new IllegalStateException("Format personnalité non autorisé : \"" + config.getDateFormat() + "\"");
@@ -212,6 +212,7 @@ public class ElasticSearchLogService extends ScheduledService<Result> {
                 sb.append("}");
             sb.append("}");
         sb.append("}");
+        System.out.println("sb = " + sb.toString());
         return sb.toString();
     }
 
