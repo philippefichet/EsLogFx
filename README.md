@@ -27,7 +27,8 @@ java -Deslogfx.configfile=/chemin/de/la/configuration -Deslogfx.cssfile=/chemin/
     "fieldDate": "timestamp", // optionnel
     "fieldMessage": "msg", // optionnel
     "fieldMessageNumberLine" : 2, // optionnel
-    "dateFormat": "timestamp"  // optionnel
+    "dateFormat": "timestamp", // optionnel
+    "dateFormatShow": "yyyy-MM-dd HH:mm:ss", // optionnel
     "fieldExclude": [  // optionnel
         "date"
     ]
@@ -43,4 +44,8 @@ java -Deslogfx.configfile=/chemin/de/la/configuration -Deslogfx.cssfile=/chemin/
 - fieldMessage nom du champs contenant le message du log, "message" par défaut
 - fieldMessageNumberLine nombre de ligne afficher dans la liste des logs du message, 1 par défaut
 - dateFormat format de la date, "yyyy-MM-dd'T'HH:mm:ss.SSSZZ" par défaut (voir http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html)
+- dateFormatShow Format de la date à afficher "yyyy-MM-dd'T'HH:mm:ss.SSSZZ" par défaut (voir http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html)
 - fieldExclude Liste des colonnes qui ne seront pas afficher
+
+## JavaFx Options
+- -Dprism.lcdtext=false permet de désactiver la gestion du texte avec sous pixel, peut améliorer la lisibilité
