@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.philippefichet.eslogfx.ElasticSearchController">
+<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.philippefichet.eslogfx.ElasticSearchController">
    <center>
       <TableView fx:id="tableLogs" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
@@ -29,6 +29,11 @@
                </HBox.margin>
             </Slider>
             <Label fx:id="schedulerLabel" />
+            <Button fx:id="localRemove" mnemonicParsing="false" text="Suppr.">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
    </top>

@@ -45,6 +45,9 @@ public class ElasticSearchController implements Initializable {
     private Button getLogsInES;
 
     @FXML
+    private Button localRemove;
+
+    @FXML
     private Label schedulerLabel;
 
     @FXML
@@ -272,6 +275,10 @@ public class ElasticSearchController implements Initializable {
             scheduleDuration.set(Duration.seconds(0));
             service.nextQueryWithFilter(filter.getText());
             service.restart();
+        });
+        
+        localRemove.setOnAction(e -> {
+            logs.clear();
         });
 
         schedulerLabel.textProperty().bind(schedulerSlider.valueProperty().asString("%.0f s."));
