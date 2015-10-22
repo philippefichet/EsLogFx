@@ -122,7 +122,7 @@ public class ElasticSearchController implements Initializable {
         filter.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 tableLogs.setItems(logs.filtered((Map<String, String> t) -> {
-                    return t.get(fieldMessage).contains(filter.getText());
+                    return t.get(fieldMessageComplete).contains(filter.getText());
                 }));
             }
         });
