@@ -12,6 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <eslogfx.configfile>demo-config.json</eslogfx.configfile>
+        <eslogfx.cssfile>style.css</eslogfx.cssfile>
         <mainClass>fr.philippefichet.eslogfx.MainApp</mainClass>
     </properties>
 
@@ -99,7 +100,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>-Deslogfx.configfile=${eslogfx.configfile} ${runfx.args}</commandlineArgs>
+                            <commandlineArgs>-Dprism.lcdtext=false -Deslogfx.cssfile=${eslogfx.cssfile} -Deslogfx.configfile=${eslogfx.configfile} ${runfx.args}</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>
