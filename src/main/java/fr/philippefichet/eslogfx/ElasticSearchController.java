@@ -57,6 +57,9 @@ public class ElasticSearchController implements Initializable {
     private TextField filter;
 
     @FXML
+    private TextField exclude;
+
+    @FXML
     private ProgressBar downloadProgress;
 
     @FXML
@@ -88,6 +91,15 @@ public class ElasticSearchController implements Initializable {
     private final Map<String, List<String>> enumField = new HashMap<>();
     private final List<String> enumFieldExcluded = new ArrayList<>();
     private final Short enumFieldLimit = 50;
+
+    /**
+     * Vérifie si le log doit être affiché
+     * @param log Log à vérifier
+     * @return true si le log doit être afficher, false sinon
+     */
+    public boolean filterLogs(Map<String, String> log) {
+        return log.get(fieldMessageComplete).contains(filter.getText()) && (!exclude.getText().isEmpty() && log.get(fieldMessageComplete).contains(exclude.getText()) == false || exclude.getText().isEmpty());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -121,9 +133,12 @@ public class ElasticSearchController implements Initializable {
         });
         filter.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
-                tableLogs.setItems(logs.filtered((Map<String, String> t) -> {
-                    return t.get(fieldMessageComplete).contains(filter.getText());
-                }));
+                tableLogs.setItems(logs.filtered(this::filterLogs));
+            }
+        });
+        exclude.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                tableLogs.setItems(logs.filtered(this::filterLogs));
             }
         });
         FilteredList<Map<String, String>> filtered = logs.filtered((Map<String, String> t) -> {
