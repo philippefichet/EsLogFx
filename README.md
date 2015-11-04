@@ -49,3 +49,4 @@ java -Deslogfx.configfile=/chemin/de/la/configuration -Deslogfx.cssfile=/chemin/
 
 ## JavaFx Options
 - -Dprism.lcdtext=false permet de désactiver la gestion du texte avec sous pixel, peut améliorer la lisibilité
+- -Dprism.order=j2d Désactive l'accélération graphique et utilise un rendu avec java2d

@@ -5,13 +5,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.philippefichet.eslogfx.ElasticSearchController">
+<BorderPane prefHeight="600" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.philippefichet.eslogfx.ElasticSearchController">
    <center>
       <TableView fx:id="tableLogs" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
    <top>
       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
+            <org.controlsfx.control.CheckComboBox fx:id="levelFilter" prefWidth="150.0">
+                <items>
+                    <String fx:value="trace"/>
+                    <String fx:value="debug"/>
+                    <String fx:value="info"/>
+                    <String fx:value="warn"/>
+                    <String fx:value="warning"/>
+                    <String fx:value="notice"/>
+                    <String fx:value="error"/>
+                    <String fx:value="err"/>
+                    <String fx:value="fatal"/>
+                    <String fx:value="severe"/>
+                    <String fx:value="alert"/>
+                    <String fx:value="crit"/>
+                    <String fx:value="emerg"/>
+                </items>
+            </org.controlsfx.control.CheckComboBox>
             <TextField fx:id="exclude" promptText="Exclusion" />
             <Button fx:id="getLogsInES" mnemonicParsing="false" text="ES">
                <HBox.margin>

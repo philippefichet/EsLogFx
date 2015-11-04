@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -29,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import org.controlsfx.control.CheckComboBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -67,6 +69,9 @@ public class ElasticSearchController implements Initializable {
 
     @FXML
     private Label currentTask;
+    
+    @FXML
+    private CheckComboBox<String> levelFilter;
 
     SimpleObjectProperty<Duration> scheduleDuration = new SimpleObjectProperty<>(Duration.seconds(5));
 
@@ -85,7 +90,6 @@ public class ElasticSearchController implements Initializable {
     private Comparator<Map<String, String>> comparatorRableLogs;
 
     private final ObservableList<Map<String, String>> logs = FXCollections.observableArrayList();
-    private final ObservableList<Map<String, String>> logsFiltered = new FilteredList<>(logs);
 
     // Optimisation memoire pour les chaînes de caractére identique
     private final Map<String, List<String>> enumField = new HashMap<>();
@@ -98,7 +102,11 @@ public class ElasticSearchController implements Initializable {
      * @return true si le log doit être afficher, false sinon
      */
     public boolean filterLogs(Map<String, String> log) {
-        return log.get(fieldMessageComplete).contains(filter.getText()) && (!exclude.getText().isEmpty() && log.get(fieldMessageComplete).contains(exclude.getText()) == false || exclude.getText().isEmpty());
+        if(levelFilter.getCheckModel().getCheckedItems().contains(log.get(fieldLevel).toLowerCase())) {
+            return log.get(fieldMessageComplete).contains(filter.getText()) && (!exclude.getText().isEmpty() && log.get(fieldMessageComplete).contains(exclude.getText()) == false || exclude.getText().isEmpty());
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -116,6 +124,15 @@ public class ElasticSearchController implements Initializable {
         levelAvailable.add("alert");
         levelAvailable.add("crit");
         levelAvailable.add("emerg");
+        
+        // Selection de tous les level au lancement
+        for (String item : levelFilter.getItems()) {
+            levelFilter.getCheckModel().check(item);
+        }
+        
+        levelFilter.getCheckModel().getCheckedIndices().addListener((ListChangeListener.Change<? extends Integer> change) -> {
+            tableLogs.setItems(logs.filtered(this::filterLogs));
+        });
         
         downloadProgressText.textProperty().bind(downloadProgress.progressProperty().multiply(100).asString("%.2f").concat("%"));
         tableLogs.setOnMouseClicked((event) -> {
@@ -253,7 +270,12 @@ public class ElasticSearchController implements Initializable {
                     }
                 }
                 logs.add(row);
+//                if (!levelFilter.getItems().contains(row.get(fieldLevel))) {
+//                    levelFilter.getItems().add(row.get(fieldLevel));
+//                    levelFilter.getCheckModel().check(row.get(fieldLevel));
+//                }
             }
+            
             currentTask.textProperty().unbind();
             downloadProgress.progressProperty().unbind();
             downloadProgress.setProgress(1.0d);
