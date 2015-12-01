@@ -51,6 +51,9 @@ public class ElasticSearchController implements Initializable {
 
     @FXML
     private Label schedulerLabel;
+    
+    @FXML
+    private Label logInfo;
 
     @FXML
     private Slider schedulerSlider;
@@ -108,6 +111,10 @@ public class ElasticSearchController implements Initializable {
             return false;
         }
     }
+    
+    public void updatePercentageFilter(ListChangeListener.Change<? extends Map<String, String>> c) {
+        logInfo.setText(tableLogs.getItems().size() + " / " + logs.size() + " (" + String.format("%.2f", 100 * (float)tableLogs.getItems().size() / (float)logs.size())  + "%)");
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -124,6 +131,7 @@ public class ElasticSearchController implements Initializable {
         levelAvailable.add("alert");
         levelAvailable.add("crit");
         levelAvailable.add("emerg");
+        logs.addListener(this::updatePercentageFilter);
         
         // Selection de tous les level au lancement
         for (String item : levelFilter.getItems()) {
@@ -151,11 +159,13 @@ public class ElasticSearchController implements Initializable {
         filter.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 tableLogs.setItems(logs.filtered(this::filterLogs));
+                updatePercentageFilter(null);
             }
         });
         exclude.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 tableLogs.setItems(logs.filtered(this::filterLogs));
+                updatePercentageFilter(null);
             }
         });
         FilteredList<Map<String, String>> filtered = logs.filtered((Map<String, String> t) -> {

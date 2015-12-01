@@ -69,6 +69,11 @@
                   <Insets left="5.0" />
                </padding>
             </Label>
+            <Label fx:id="logInfo">
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
          </children>
       </HBox>
    </bottom>
