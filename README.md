@@ -8,13 +8,13 @@ Java 8+ requis et JavaFX 8
 ## Compilation
 
 ```shell
-mvn package
+./gradlew shadowJar
 ```
 
 ## Lancement
 
 ```shell
-java -Deslogfx.configfile=/chemin/de/la/configuration -Deslogfx.cssfile=/chemin/de/la/feuille/de/style -jar target/EsLogFx-1.0-SNAPSHOT.jar
+java -Deslogfx.configfile=/chemin/de/la/configuration -Deslogfx.cssfile=/chemin/de/la/feuille/de/style -jar build/libs/EsLogFx-1.0-SNAPSHOT-all.jar
 ```
 
 ## Fichier de configuration : 
